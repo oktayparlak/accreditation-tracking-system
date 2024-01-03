@@ -12,3 +12,5 @@ router.get('/:id', verify, surveyController.getById);
 
 /** Post */
 router.post('/', verify, validate(surveySchema.create), surveyController.create);
+
+module.exports = router;

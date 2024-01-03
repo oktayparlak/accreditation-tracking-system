@@ -22,6 +22,6 @@ module.exports = () => {
   MeasuringTool.belongsTo(Application, { foreignKey: 'applicationId' });
   Application.hasMany(MeasuringTool, { foreignKey: 'applicationId' });
 
-  Survey.belongsTo(Application, { foreignKey: 'applicationId' });
-  Application.hasMany(Survey, { foreignKey: 'applicationId' });
+  Survey.belongsTo(User, { foreignKey: 'userId' });
+  User.hasMany(Survey, { foreignKey: 'userId' });
 };

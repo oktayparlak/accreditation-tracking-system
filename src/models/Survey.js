@@ -9,7 +9,7 @@ const Survey = sequelize.define('Survey', {
     allowNull: false,
     primaryKey: true,
   },
-  applicationId: {
+  userId: {
     type: DataTypes.UUID,
     allowNull: false,
   },
