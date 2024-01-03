@@ -3,6 +3,7 @@ const Course = require('./Course');
 const File = require('./File');
 const MeasuringTool = require('./MeasuringTool');
 const Question = require('./Question');
+const Survey = require('./Survey');
 const User = require('./User');
 
 module.exports = () => {
@@ -20,4 +21,7 @@ module.exports = () => {
 
   MeasuringTool.belongsTo(Application, { foreignKey: 'applicationId' });
   Application.hasMany(MeasuringTool, { foreignKey: 'applicationId' });
+
+  Survey.belongsTo(Application, { foreignKey: 'applicationId' });
+  Application.hasMany(Survey, { foreignKey: 'applicationId' });
 };
