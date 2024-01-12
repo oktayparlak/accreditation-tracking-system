@@ -1,5 +1,6 @@
 const Application = require('../models/Application');
 const Question = require('../models/Question');
+const Course = require('../models/Course');
 const MeasuringTool = require('../models/MeasuringTool');
 const User = require('../models/User');
 const File = require('../models/File');
@@ -33,7 +34,7 @@ exports.create = async (req, res) => {
 /** Read */
 exports.getById = async (req, res) => {
   try {
-    const application = await Application.findOne({ where: { id: req.params.id }, include: [User] });
+    const application = await Application.findOne({ where: { id: req.params.id }, include: [User, Course] });
     if (!application) return res.status(404).json({ error: { message: 'Application not found' } });
     const measuringTools = await MeasuringTool.findAll({ where: { applicationId: application.id }, include: [Question] });
     const files = await File.findAll({ where: { applicationId: application.id } });
