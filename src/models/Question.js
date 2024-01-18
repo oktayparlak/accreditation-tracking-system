@@ -17,13 +17,17 @@ const Question = sequelize.define('Question', {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  avarage: {
+  average: {
     type: DataTypes.FLOAT,
     allowNull: false,
   },
   fullPoints: {
     type: DataTypes.FLOAT,
     allowNull: false,
+  },
+  relevantTitle: {
+    type: DataTypes.STRING,
+    allowNull: true,
   },
 });
 

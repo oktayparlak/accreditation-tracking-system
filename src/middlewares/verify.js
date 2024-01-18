@@ -4,6 +4,7 @@ require('dotenv').config();
 module.exports = (req, res, next) => {
   let token = req.header('Authorization');
   if (!token) {
+    console.log('No token');
     return res.status(401).json({ error: { message: 'Unauthorized' } });
   }
   if (token.startsWith('Bearer ')) {

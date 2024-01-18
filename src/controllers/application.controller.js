@@ -7,28 +7,33 @@ const File = require('../models/File');
 
 /** Create */
 exports.create = async (req, res) => {
-  try {
-    const { measuringTools, courseId } = JSON.parse(req.body.data);
-    const application = await Application.create({ userId: req.user.id, courseId });
-    measuringTools.forEach(async (measuringTool) => {
-      const createdMeasuringTool = await MeasuringTool.create({
-        applicationId: application.id,
-        name: measuringTool.name,
-        impactRate: measuringTool.impactRate,
-      });
-      const transformedQuestions = measuringTool.questions.map((question) => {
-        return { ...question, measuringToolId: createdMeasuringTool.id };
-      });
-      await Question.bulkCreate(transformedQuestions);
+  const { measuringTools, courseId } = JSON.parse(req.body.data);
+  const application = await Application.create({ userId: req.user.id, courseId });
+
+  measuringTools.forEach(async (measuringTool) => {
+    const createdMeasuringTool = await MeasuringTool.create({
+      applicationId: application.id,
+      name: measuringTool.name,
+      impactRate: measuringTool.impactRate,
     });
-    const transformedFiles = req.files.map((file) => {
-      return { applicationId: application.id, name: file.originalname, url: file.path };
-    });
-    await File.bulkCreate(transformedFiles);
-    return res.status(201).json({ message: 'Application created successfully' });
-  } catch (error) {
-    return res.status(500).json({ error });
-  }
+    console.log(measuringTool);
+    // Use optional chaining to check if measuringTool.questions is defined before mapping over it
+    const transformedQuestions = measuringTool.questionsData?.map((question) => ({
+      ...question,
+      measuringToolId: createdMeasuringTool.id,
+    }));
+    await Question.bulkCreate(transformedQuestions);
+  });
+
+  const transformedFiles = req.files.map((file) => ({
+    applicationId: application.id,
+    name: file.originalname,
+    url: file.path,
+  }));
+
+  await File.bulkCreate(transformedFiles);
+
+  return res.status(201).json({ message: 'Application created successfully' });
 };
 
 /** Read */
@@ -50,6 +55,16 @@ exports.getAll = async (req, res) => {
     const applications = await Application.findAll({ include: [User] });
     if (!applications || applications.length === 0) return res.status(404).json({ error: { message: 'Applications not found' } });
     return res.status(200).json({ applications });
+  } catch (error) {
+    return res.status(500).json({ error });
+  }
+};
+
+exports.download = async (req, res) => {
+  try {
+    const file = await File.findOne({ where: { id: req.params.id } });
+    if (!file) return res.status(404).json({ error: { message: 'File not found' } });
+    return res.download(file.url);
   } catch (error) {
     return res.status(500).json({ error });
   }

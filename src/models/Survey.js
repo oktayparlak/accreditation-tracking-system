@@ -13,12 +13,25 @@ const Survey = sequelize.define('Survey', {
     type: DataTypes.UUID,
     allowNull: false,
   },
-  title: {
-    type: DataTypes.STRING,
+  question1: {
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
-  description: {
-    type: DataTypes.TEXT,
+  question2: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  question3: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  question4: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  question5: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
   },
 });
 

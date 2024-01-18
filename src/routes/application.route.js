@@ -11,6 +11,8 @@ router.get('/:id', verify, applicationController.getById);
 
 router.get('/', verify, applicationController.getAll);
 
+router.get('/download/:id', verify, applicationController.download);
+
 /** Post */
 router.post('/', verify, validate(applicationSchema.create), upload.array('files', 4), applicationController.create);
 
