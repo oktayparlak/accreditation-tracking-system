@@ -1,9 +1,11 @@
 const Joi = require('joi');
 
 const create = Joi.object({
-  applicationId: Joi.string().required(),
-  title: Joi.string().required(),
-  description: Joi.string().required(),
+  question1: Joi.number(),
+  question2: Joi.number(),
+  question3: Joi.number(),
+  question4: Joi.number(),
+  question5: Joi.number(),
 });
 
 module.exports = { create };
