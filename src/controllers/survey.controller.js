@@ -21,8 +21,8 @@ exports.getAll = async (req, res) => {
 
 exports.getById = async (req, res) => {
   try {
-    const survey = await Survey.findByPk(req.params.id);
-    return res.status(200).json({ survey });
+    const survey = await Survey.findOne({ where: { userId: req.params.id } });
+    return res.status(200).json(survey);
   } catch (error) {
     return res.status(500).json({ error });
   }
