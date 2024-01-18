@@ -25,7 +25,7 @@ const Question = sequelize.define('Question', {
     type: DataTypes.FLOAT,
     allowNull: false,
   },
-  relevantTitle: {
+  relevantNumbers: {
     type: DataTypes.STRING,
     allowNull: true,
   },

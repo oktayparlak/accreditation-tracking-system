@@ -41,7 +41,7 @@ sequelize.sync({ force: false }).then(async () => {
   //   password: '$2a$10$WN1eXKVbc7CQZAFTDclJROJ6Fxxi/xTihle4zSU3W8jRZtY2ztebC',
   //   type: 'ADMIN',
   // });
-  // /** User */
+  /** User */
   // await User.create({
   //   username: 'mehmetparlak',
   //   password: '$2b$10$.L9d4S1ecivHP4Q7oWGHHexTl2wvKB1lV/iL85Xxol8cbCWq6rpne',
