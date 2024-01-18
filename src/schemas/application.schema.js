@@ -11,7 +11,7 @@ const create = Joi.object({
           Joi.object({
             number: Joi.number().required(),
             avarage: Joi.number().required(),
-            relevantTitle: Joi.string().required(),
+            relevantNumbers: Joi.string().required(),
             fullPoints: Joi.number().required(),
           })
         )
@@ -31,7 +31,7 @@ const update = Joi.object({
           Joi.object({
             number: Joi.number().required(),
             avarage: Joi.number().required(),
-            relevantTitle: Joi.string().required(),
+            relevantNumbers: Joi.string().required(),
             fullPoints: Joi.number().required(),
           })
         )
