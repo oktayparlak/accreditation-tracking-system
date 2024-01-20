@@ -1,6 +1,8 @@
 const Application = require('./Application');
 const Course = require('./Course');
 const File = require('./File');
+const LearningMaterial = require('./LearningMaterial');
+const LearningMaterialQuestion = require('./LearningMaterialQuestion');
 const MeasuringTool = require('./MeasuringTool');
 const Question = require('./Question');
 const Survey = require('./Survey');
@@ -24,4 +26,13 @@ module.exports = () => {
 
   Survey.belongsTo(User, { foreignKey: 'userId' });
   User.hasMany(Survey, { foreignKey: 'userId' });
+
+  LearningMaterial.belongsTo(User, { foreignKey: 'userId' });
+  User.hasMany(LearningMaterial, { foreignKey: 'userId' });
+
+  LearningMaterialQuestion.belongsTo(Question, { foreignKey: 'questionId' });
+  Question.hasMany(LearningMaterialQuestion, { foreignKey: 'questionId' });
+
+  LearningMaterialQuestion.belongsTo(LearningMaterial, { foreignKey: 'learningMaterialId' });
+  LearningMaterial.hasMany(LearningMaterialQuestion, { foreignKey: 'learningMaterialId' });
 };

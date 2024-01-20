@@ -4,6 +4,7 @@ const Course = require('../models/Course');
 const MeasuringTool = require('../models/MeasuringTool');
 const User = require('../models/User');
 const File = require('../models/File');
+const LearningMaterialQuestion = require('../models/LearningMaterialQuestion');
 
 /** Create */
 exports.create = async (req, res) => {
@@ -18,11 +19,17 @@ exports.create = async (req, res) => {
     });
     console.log(measuringTool);
     // Use optional chaining to check if measuringTool.questions is defined before mapping over it
-    const transformedQuestions = measuringTool.questionsData?.map((question) => ({
-      ...question,
-      measuringToolId: createdMeasuringTool.id,
-    }));
-    await Question.bulkCreate(transformedQuestions);
+    measuringTool.questionsData?.forEach(async (question) => {
+      const createdQuestion = await Question.create({
+        number: question.number,
+        average: question.average,
+        fullPoints: question.fullPoints,
+        measuringToolId: createdMeasuringTool.id,
+      });
+      question.relevantNumberIds?.forEach(async (relevantNumberId) => {
+        await LearningMaterialQuestion.create({ questionId: createdQuestion.id, learningMaterialId: relevantNumberId });
+      });
+    });
   });
 
   const transformedFiles = req.files.map((file) => ({

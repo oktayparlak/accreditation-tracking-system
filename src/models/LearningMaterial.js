@@ -2,29 +2,30 @@ const { DataTypes } = require('sequelize');
 
 const sequelize = require('../configs/database');
 
-const Question = sequelize.define('Question', {
+const LearningMaterial = sequelize.define('LearningMaterial', {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
-    allowNull: false,
     primaryKey: true,
+    allowNull: false,
   },
-  measuringToolId: {
+  userId: {
     type: DataTypes.UUID,
     allowNull: false,
   },
   number: {
     type: DataTypes.INTEGER,
+    autoIncrement: true,
     allowNull: false,
   },
-  average: {
-    type: DataTypes.FLOAT,
+  content: {
+    type: DataTypes.TEXT,
     allowNull: false,
   },
-  fullPoints: {
-    type: DataTypes.FLOAT,
+  contributionLevel: {
+    type: DataTypes.ENUM('1', '2', '3', '4', '5'),
     allowNull: false,
   },
 });
 
-module.exports = Question;
+module.exports = LearningMaterial;
