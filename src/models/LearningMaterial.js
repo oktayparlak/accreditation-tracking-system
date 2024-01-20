@@ -26,6 +26,26 @@ const LearningMaterial = sequelize.define('LearningMaterial', {
     type: DataTypes.ENUM('1', '2', '3', '4', '5'),
     allowNull: false,
   },
+  impactSum: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    defaultValue: 0,
+  },
+  impactTotal: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    defaultValue: 0,
+  },
+  succesRate: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    defaultValue: 0,
+  },
+  succesPoint: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    defaultValue: 0,
+  },
 });
 
 module.exports = LearningMaterial;
