@@ -7,11 +7,11 @@ const validate = require('../middlewares/validateSchema');
 const applicationController = require('../controllers/application.controller');
 
 /** Get */
+router.get('/download/:id', verify, applicationController.download);
+
 router.get('/:id', verify, applicationController.getById);
 
 router.get('/', verify, applicationController.getAll);
-
-router.get('/download/:id', verify, applicationController.download);
 
 /** Post */
 router.post('/', verify, validate(applicationSchema.create), upload.array('files', 4), applicationController.create);
