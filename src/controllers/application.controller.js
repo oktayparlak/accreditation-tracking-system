@@ -12,46 +12,69 @@ exports.create = async (req, res) => {
   let x = 0,
     y = 0,
     z = 0,
-    t = 0;
-  f = 0;
-  r = 0;
+    t = 0,
+    f = 0,
+    r = 0;
   const { measuringTools, courseId } = JSON.parse(req.body.data);
   const application = await Application.create({ userId: req.user.id, courseId });
 
-  measuringTools.forEach(async (measuringTool) => {
+  for (const measuringTool of measuringTools) {
     const createdMeasuringTool = await MeasuringTool.create({
       applicationId: application.id,
       name: measuringTool.name,
       impactRate: measuringTool.impactRate,
     });
     x = measuringTool.impactRate / 100;
-    // Use optional chaining to check if measuringTool.questions is defined before mapping over it
-    measuringTool.questionsData?.forEach(async (question) => {
-      y = question.average / 100;
-      z = question.average / question.fullPoints;
-      f = question.fullPoints / 100;
-      t = x * y * z;
-      r = x * f;
-      const createdQuestion = await Question.create({
-        number: question.number,
-        average: question.average,
-        fullPoints: question.fullPoints,
-        measuringToolId: createdMeasuringTool.id,
-      });
-      question.relevantNumberIds?.forEach(async (relevantNumberId) => {
-        const learningMaterial = await LearningMaterialQuestion.create({ questionId: createdQuestion.id, learningMaterialId: relevantNumberId });
-        learningMaterial.impactSum += t;
-        learningMaterial.impactTotal += r;
-        await learningMaterial.save();
-      });
-    });
-  });
+
+    // Use optional chaining to check if measuringTool.questionsData is defined before mapping over it
+    if (measuringTool.questionsData) {
+      for (const question of measuringTool.questionsData) {
+        y = question.average / 100;
+        z = question.average / question.fullPoints;
+        f = question.fullPoints / 100;
+        t = x * y * z;
+        r = x * f;
+        console.log(`
+          x: ${x}
+          y: ${y}
+          z: ${z}
+          f: ${f}
+          t: ${t}
+          r: ${r}`);
+        const createdQuestion = await Question.create({
+          number: question.number,
+          average: question.average,
+          fullPoints: question.fullPoints,
+          measuringToolId: createdMeasuringTool.id,
+        });
+
+        if (question.relevantNumberIds) {
+          for (const relevantNumberId of question.relevantNumberIds) {
+            await LearningMaterialQuestion.create({
+              questionId: createdQuestion.id,
+              learningMaterialId: relevantNumberId,
+            });
+
+            const learningMaterial = await LearningMaterial.findOne({ where: { id: relevantNumberId } });
+            learningMaterial.impactSum += t;
+            learningMaterial.impactTotal += r;
+            console.log(`
+              learningMaterial.impactSum: ${learningMaterial.impactSum}
+              learningMaterial.impactTotal: ${learningMaterial.impactTotal}`);
+            await learningMaterial.save();
+          }
+        }
+        console.log('---------------------------------');
+      }
+    }
+  }
 
   const learningMaterials = await LearningMaterial.findAll({ where: { userId: req.user.id } });
-  let result = 0;
-  learningMaterials.forEach(async (learningMaterial) => {
-    result = (learningMaterial.impactSum / learningMaterial.impactTotal) * 100;
+
+  for (const learningMaterial of learningMaterials) {
+    let result = (learningMaterial.impactSum / learningMaterial.impactTotal) * 100;
     learningMaterial.succesRate = result;
+
     if (result >= 80) {
       learningMaterial.succesPoint = 5;
     } else if (result >= 60 && result < 80) {
@@ -64,7 +87,7 @@ exports.create = async (req, res) => {
       learningMaterial.succesPoint = 1;
     }
     await learningMaterial.save();
-  });
+  }
 
   const transformedFiles = req.files.map((file) => ({
     applicationId: application.id,
@@ -84,7 +107,8 @@ exports.getById = async (req, res) => {
     if (!application) return res.status(404).json({ error: { message: 'Application not found' } });
     const measuringTools = await MeasuringTool.findAll({ where: { applicationId: application.id }, include: [Question] });
     const files = await File.findAll({ where: { applicationId: application.id } });
-    const data = { ...application.dataValues, measuringTools, files };
+    const learningMaterials = await LearningMaterial.findAll({ where: { userId: req.user.id } });
+    const data = { ...application.dataValues, measuringTools, files, learningMaterials };
     return res.status(200).json({ ...data });
   } catch (error) {
     return res.status(500).json({ error });

@@ -1,0 +1,51 @@
+{
+    "courseId":"26abe68a-3377-4fc6-ad5e-cd0fe51a2644",
+    "measuringTools": [
+        {
+            "name":"Tool 1",
+            "impactRate":50,
+            "questionsData": [
+                {
+                    "number":1,
+                    "average":4.5,
+                    "fullPoints":10,
+                    "relevantNumberIds": [
+                        "1e27d027-ead6-4626-9106-8165bc8047d0",
+                        "eb837ae6-2800-493f-89c7-e0b9176bfdec"
+                    ]
+                },
+                {
+                    "number": 2,
+                    "average": 3.2,
+                    "fullPoints": 8,
+                    "relevantNumberIds": [
+                        "1e27d027-ead6-4626-9106-8165bc8047d0",
+                        "6a9776a3-4e57-4542-b97d-80b17fe4db22"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Tool 2",
+            "impactRate": 40,
+            "questionsData":[
+                {
+                    "number": 3,
+                    "average": 30,
+                    "fullPoints": 30,
+                    "relevantNumberIds": [
+                        "eb837ae6-2800-493f-89c7-e0b9176bfdec"
+                    ]
+                },
+                {
+                    "number": 4,
+                    "average": 90,
+                    "fullPoints": 90,
+                    "relevantNumberIds": [
+                        "30eed3e0-5580-45dd-9e36-639e1fb54e1f"
+                    ]
+                }
+            ]
+        }
+    ]
+}

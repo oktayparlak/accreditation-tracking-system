@@ -3,9 +3,9 @@ const LearningMaterial = require('../models/LearningMaterial');
 exports.create = async (req, res) => {
   try {
     const learningMaterials = req.body.learningMaterials;
-    learningMaterials.forEach(async (learningMaterial) => {
+    for (const learningMaterial of learningMaterials) {
       await LearningMaterial.create({ ...learningMaterial, userId: req.user.id });
-    });
+    }
     return res.status(201).json({ message: 'Learning materials created successfully' });
   } catch (error) {
     console.error(error);
@@ -15,7 +15,7 @@ exports.create = async (req, res) => {
 
 exports.getAll = async (req, res) => {
   try {
-    const learningMaterials = await LearningMaterial.findAll();
+    const learningMaterials = await LearningMaterial.findAll({ where: { userId: req.user.id } });
     if (!learningMaterials || learningMaterials.length === 0) return res.status(404).json({ error: { message: 'Learning materials not found' } });
     return res.status(200).json(learningMaterials);
   } catch (error) {
